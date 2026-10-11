@@ -1,0 +1,6 @@
+# Caddy terminates HTTPS for your domain (Let's Encrypt certificate, renewed automatically)
+# and hands everything to the web container, which serves the app and proxies /api itself.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy web:80
+}

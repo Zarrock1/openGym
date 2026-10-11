@@ -1,0 +1,24 @@
+# Overlay for a VPS with a domain: adds Caddy in front of openGym for automatic HTTPS.
+# Run from the repository root:
+#   docker compose -f docker-compose.yml -f deploy/vps/docker-compose.caddy.yml up -d
+# deploy/vps/setup.sh does this for you. Relative paths below resolve against the repository root.
+services:
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      - DOMAIN=${RP_ID}
+    volumes:
+      - ./deploy/vps/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
